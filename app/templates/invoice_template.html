@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Račun {{ racun.stevilka_racuna }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 20px;
+        }
+        
+        .company-info {
+            flex: 1;
+        }
+        
+        .company-info h1 {
+            color: #0066cc;
+            font-size: 18px;
+            margin: 0 0 10px 0;
+        }
+        
+        .invoice-info {
+            text-align: right;
+            flex: 1;
+        }
+        
+        .invoice-title {
+            font-size: 24px;
+            color: #0066cc;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .customer-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .customer-info, .invoice-details {
+            flex: 1;
+        }
+        
+        .customer-info h3, .invoice-details h3 {
+            color: #0066cc;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .invoice-table th {
+            background-color: #0066cc;
+            color: white;
+            padding: 8px;
+            text-align: left;
+            font-size: 10px;
+        }
+        
+        .invoice-table td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #ddd;
+            font-size: 9px;
+        }
+        
+        .invoice-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .summary-table {
+            width: 300px;
+            margin-left: auto;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        
+        .summary-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .summary-table .total-row {
+            background-color: #0066cc;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .statistics {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .statistics h3 {
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            font-size: 12px;
+            color: #0066cc;
+        }
+        
+        .stat-label {
+            font-size: 9px;
+            color: #666;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 9px;
+            color: #666;
+            text-align: center;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="company-info">
+            <h1>{{ company.name }}</h1>
+            <div>{{ company.address }}</div>
+            <div>Davčna št.: {{ company.tax_number }}</div>
+            <div>Tel: {{ company.phone }}</div>
+            <div>E-mail: {{ company.email }}</div>
+        </div>
+        <div class="invoice-info">
+            <div class="invoice-title">RAČUN</div>
+            <div><strong>Št. računa:</strong> {{ racun.stevilka_racuna }}</div>
+            <div><strong>Datum izdaje:</strong> {{ racun.datum_izdaje.strftime('%d.%m.%Y') }}</div>
+        </div>
+    </div>
+    
+    <div class="customer-section">
+        <div class="customer-info">
+            <h3>Kupec:</h3>
+            <div><strong>{{ stranka.ime }} {{ stranka.priimek }}</strong></div>
+            <div>{{ stranka.naslov }}</div>
+            {% if stranka.email %}
+            <div>E-mail: {{ stranka.email }}</div>
+            {% endif %}
+            {% if stranka.telefon %}
+            <div>Tel: {{ stranka.telefon }}</div>
+            {% endif %}
+        </div>
+        <div class="invoice-details">
+            <h3>Podrobnosti računa:</h3>
+            <div><strong>Obračunsko obdobje:</strong></div>
+            <div>{{ racun.datum_od.strftime('%d.%m.%Y') }} - {{ racun.datum_do.strftime('%d.%m.%Y') }}</div>
+            <div><strong>Lokacija:</strong></div>
+            <div>{{ lokacija.naziv }}</div>
+            <div>{{ lokacija.naslov }}</div>
+            <div><strong>Merilna št.:</strong> {{ lokacija.merilna_stevilka }}</div>
+        </div>
+    </div>
+    
+    <div class="statistics">
+        <h3>Povzetek obdobja</h3>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">{{ "%.4f"|format(stats.skupna_poraba) }} kWh</div>
+                <div class="stat-label">Skupna poraba</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ "%.5f"|format(stats.povprecna_cena) }} EUR/kWh</div>
+                <div class="stat-label">Povprečna cena</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ stats.st_meritev }}</div>
+                <div class="stat-label">Število meritev</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ "%.5f"|format(stats.minimalna_cena) }} EUR/kWh</div>
+                <div class="stat-label">Min. cena</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ "%.5f"|format(stats.maksimalna_cena) }} EUR/kWh</div>
+                <div class="stat-label">Max. cena</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">{{ "%.2f"|format(stats.skupni_strosek) }} EUR</div>
+                <div class="stat-label">Skupni strošek</div>
+            </div>
+        </div>
+    </div>
+    
+    {% if postavke|length <= 50 %}
+    <h3>Podrobne postavke:</h3>
+    <table class="invoice-table">
+        <thead>
+            <tr>
+                <th>Čas meritve</th>
+                <th class="text-right">Poraba (kWh)</th>
+                <th class="text-right">Cena (EUR/kWh)</th>
+                <th class="text-right">Znesek (EUR)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for postavka in postavke %}
+            <tr>
+                <td>{{ postavka.meritev.casovni_zig.strftime('%d.%m.%Y %H:%M') }}</td>
+                <td class="text-right">{{ "%.4f"|format(postavka.poraba_kwh) }}</td>
+                <td class="text-right">{{ "%.5f"|format(postavka.cena_eur_kwh) }}</td>
+                <td class="text-right">{{ "%.2f"|format(postavka.znesek) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div style="text-align: center; padding: 20px; background-color: #f9f9f9; border-radius: 5px;">
+        <strong>Opomba:</strong> Zaradi velikega števila meritev ({{ postavke|length }}) podrobnosti niso prikazane.<br>
+        Račun je izračunan na osnovi vseh {{ postavke|length }} 15-minutnih meritev v obdobju.
+    </div>
+    {% endif %}
+    
+    <table class="summary-table">
+        <tr>
+            <td><strong>Skupaj brez DDV:</strong></td>
+            <td class="text-right"><strong>{{ "%.2f"|format(racun.skupni_znesek) }} EUR</strong></td>
+        </tr>
+        <tr>
+            <td>DDV (22%):</td>
+            <td class="text-right">{{ "%.2f"|format(racun.skupni_znesek * 0.22) }} EUR</td>
+        </tr>
+        <tr class="total-row">
+            <td><strong>SKUPAJ Z DDV:</strong></td>
+            <td class="text-right"><strong>{{ "%.2f"|format(racun.skupni_znesek * 1.22) }} EUR</strong></td>
+        </tr>
+    </table>
+    
+    <div class="footer">
+        <p><strong>Navodila za plačilo:</strong><br>
+        Račun poravnajte v roku 15 dni od datuma izdaje na TRR: SI56 xxxx xxxx xxxx xxx<br>
+        Sklic: {{ racun.stevilka_racuna.replace('-', '') }}</p>
+        
+        <p style="margin-top: 20px;">
+        Račun je bil avtomatsko generiran dne {{ generated_at.strftime('%d.%m.%Y ob %H:%M') }}<br>
+        {{ company.name }} | {{ company.address }} | {{ company.email }}
+        </p>
+    </div>
+</body>
+</html>
