@@ -65,7 +65,7 @@ INSERT INTO lokacije (stranka_id, naziv, naslov, merilna_stevilka) VALUES
 (2, 'Lokacija 2', 'Celovška cesta 2, 1000 Ljubljana', 'SI-002'),
 (3, 'Lokacija 3', 'Dunajska cesta 3, 1000 Ljubljana', 'SI-003');
 
--- Kreiranje indeksov za boljšo performanco
+-- Kreiranje indeksov za boljšo optimizacijo
 CREATE INDEX idx_meritve_lokacija_cas ON meritve(lokacija_id, casovni_zig);
 CREATE INDEX idx_racuni_lokacija ON racuni(lokacija_id);
 CREATE INDEX idx_postavke_racun ON postavke_racuna(racun_id);
