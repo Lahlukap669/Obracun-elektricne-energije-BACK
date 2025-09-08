@@ -5,7 +5,7 @@ from datetime import datetime
 from decimal import Decimal
 from sqlalchemy.orm import Session
 from ..models.models import Meritev, Lokacija
-from ..schemas.schemas import CSVImportResponse
+from ..services.schemas import CSVImportResponse
 from ..core.logging import app_logger
 from fastapi import HTTPException
 

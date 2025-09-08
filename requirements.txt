@@ -9,3 +9,11 @@ weasyprint==66.0
 passlib[bcrypt]==1.7.4
 python-multipart==0.0.20
 python-dotenv==1.1.1
+pydantic-settings==2.6.1
+aiofiles==24.1.0
+aiosmtplib==3.0.2
+python-dateutil==2.9.0.post0
+openpyxl==3.1.5
+loguru==0.7.2
+python-jose[cryptography]==3.3.0
+alembic==1.14.0
